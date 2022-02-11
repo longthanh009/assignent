@@ -7,6 +7,7 @@ import productAdmin from "./pages/admin/products";
 import productAdd from "./pages/admin/products/add";
 import productEdit from "./pages/admin/products/edit";
 import HomePage from "./pages/home";
+import Lognin from "./pages/lognin";
 import ProductsPage from "./pages/products";
 
 const router = new Navigo("/", { linksSelector: "a" });
@@ -25,6 +26,7 @@ router.on({
     "/admin/categories/:id/edit": ({ data }) => print(cateEdit, data.id),
     "/admin/products": () => print(productAdmin),
     "/admin/products/add": () => print(productAdd),
+    "/lognin": () => print(Lognin),
     "/admin/products/:id/edit": () => print(productEdit),
 });
 router.resolve();
