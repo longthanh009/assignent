@@ -1,0 +1,41 @@
+{
+  "categories": [
+    {
+      "id": "1",
+      "name": "Okeoke"
+    },
+    {
+      "id": "2",
+      "name": "table"
+    },
+    {
+      "name": "Pen",
+      "id": "8UY6GU9"
+    },
+    {
+      "id": 4,
+      "name": "Quần Áo"
+    }
+  ],
+  "products": [
+    {
+      "id": "1",
+      "product_name": "abc",
+      "price": "5",
+      "sale": "3",
+      "desc": "cderv",
+      "img": "cderv",
+      "id_cate": "1",
+      "created_time": "30/2"
+    }
+  ],
+  "banner": [
+    {
+      "id": "1",
+      "title": "abcdef",
+      "desc": "dcdreg",
+      "image": "abc.jpg",
+      "url": "abcsd"
+    }
+  ]
+}
