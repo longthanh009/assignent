@@ -1,8 +1,13 @@
+import axios from "axios";
+import { getAll } from "../../../api/categories";
+import { addPro } from "../../../api/products";
 import AdminFooter from "../../../componemt/AdminFooter";
 import AdminHeader from "../../../componemt/AdminHeader";
+import { myForm } from "../../../utils/validate";
 
 const productAdd = {
-    render() {
+    async render() {
+        const { data } = await getAll();
         return /* html */`
         <div class="container-scroller">
         <!-- partial:./partials/_navbar.html -->
@@ -142,65 +147,65 @@ const productAdd = {
                     <div class="col-md-6 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                        <h4 class="card-title">Thêm</h4>
+                        <h4 class="card-title">Create Product</h4>
                         <p class="card-description">
-                            Thêm 1 sản phẩm vào trang sản phẩm
+                            Create new a product in products
                         </p>
-                        <form class="forms-sample">
+                        <form class="forms-sample" id="form-Product">
                             <div class="form-group">
-                            <label for="exampleInputUsername1">Username</label>
-                            <input type="text" class="form-control"
-                                id="exampleInputUsername1" placeholder="Username">
-                            </div>
-                            <div class="form-group">
-                            <label for="exampleInputEmail1">Email address</label>
-                            <input type="email" class="form-control"
-                                id="exampleInputEmail1" placeholder="Email">
+                                <label for="exampleInputID">ID</label>
+                                <input type="text" class="form-control"
+                                    id="exampleInputID" placeholder="ID AUTO" disabled>
+                                <label class="err"></label>
+
                             </div>
                             <div class="form-group">
-                            <label>File upload</label>
-                            <input type="file" name="img[]"
-                                class="file-upload-default">
-                            <div class="input-group col-xs-12">
-                                <input type="text" class="form-control file-upload-info"
-                                disabled placeholder="Upload Image">
-                                <span class="input-group-append">
-                                <button class="file-upload-browse btn btn-primary"
-                                    type="button">Upload</button>
-                                </span>
-                            </div>
+                                <label for="productName">Product Name</label>
+                                <input type="text" class="form-control"
+                                    id="productName" placeholder="Tên sản phẩm">
+                                <label class="err" id="err_namePro"></label>
+
                             </div>
                             <div class="form-group">
-                            <label for="exampleInputPassword1">Password</label>
-                            <input type="password" class="form-control"
-                                id="exampleInputPassword1" placeholder="Password">
+                                <label for="productPrice">Price</label>
+                                <input type="text" class="form-control"
+                                    id="productPrice"  placeholder="Giá của sản phẩm">
+                                <label class="err" id="err_pricePro"></label>
+
                             </div>
                             <div class="form-group">
-                            <label for="exampleInputConfirmPassword1">Confirm
-                                Password</label>
-                            <input type="password" class="form-control"
-                                id="exampleInputConfirmPassword1"
-                                placeholder="Password">
+                                <label for="productSale">Sale</label>
+                                <input type="text" class="form-control"
+                                    id="productSale"  placeholder="Giá sale của sản phẩm" value="0">
+                                <label class="err" id="err_salePro"></label>
+
                             </div>
                             <div class="form-group">
-                            <label>Single select box using select 2</label>
-                            <select class="js-example-basic-single w-100">
-                                <option value="AL">Alabama</option>
-                                <option value="WY">Wyoming</option>
-                                <option value="AM">America</option>
-                                <option value="CA">Canada</option>
-                                <option value="RU">Russia</option>
-                            </select>
+                                <label for="formFile" class="form-label">Default file input example</label>
+                                <input class="form-control" type="file" id="formFile">
+                                <label class="err" id="err_filePro"></label>
+                                
                             </div>
-                            <div class="form-check form-check-flat form-check-primary">
-                            <label class="form-check-label">
-                                <input type="checkbox" class="form-check-input">
-                                Remember me
-                            </label>
+                            <div class="form-group">
+                                <label>Categoried Products</label>
+                                <select class="js-example-basic-single w-100" id="catePro">
+                                    <option value="">Chose</option>
+                                ${data.map((value) => `
+                                    <option value="${value.id}">${value.name}</option>
+                                `)}
+                                </select>
+                                <label class="err" id="err_catePro"></label>
+
                             </div>
-                            <button type="submit"
-                            class="btn btn-primary mr-2">Submit</button>
-                            <button class="btn btn-light">Cancel</button>
+                            <div class="form-group">
+                                <label for="productDesc">Description</label>
+                                <textarea class="form-control" name="" id="productDesc" cols="30" rows="40" placeholder="Mô tả sản phẩm"></textarea>
+                            </div>
+                            <div>
+                                <button
+                                class="btn btn-primary mr-2">Submit</button>
+                                <a class="btn btn-light">Cancel</a>
+                            </div>
                         </form>
                         </div>
                     </div>
@@ -212,6 +217,58 @@ const productAdd = {
         </div>
     </div>
         `;
+    },
+    afterRender() {
+        const btnSub = document.querySelector("#form-Product");
+        const formFile = document.querySelector("#formFile");
+        formFile.addEventListener("change", (e) => {
+            const file = e.target.files[0];
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("upload_preset", "ha9jmrbt");
+            axios({
+                url: "https://api.cloudinary.com/v1_1/df4kjrav4/image/upload",
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-formendcoded",
+                },
+                data: formData,
+            }).then((res) => {
+                btnSub.addEventListener("submit", (e) => {
+                    e.preventDefault();
+                    Promise.all([
+                        myForm({
+                            idElement: "#productName",
+                            errId: "#err_namePro",
+                            content: "Tên sản phẩm không được để trống",
+                        }),
+                        myForm({
+                            idElement: "#productPrice",
+                            errId: "#err_pricePro",
+                            content: "Nhập giá sản phẩm",
+                        }),
+                        myForm({
+                            idElement: "#catePro",
+                            errId: "#err_catePro",
+                            content: "Chọn danh mục sản phẩm",
+                        }),
+                    ]).then(() => {
+                        addPro({
+                            product_name: document.querySelector("#productName").value,
+                            price: +document.querySelector("#productPrice").value,
+                            sale: +document.querySelector("#productSale").value,
+                            desc: document.querySelector("#productDesc").value,
+                            img: res.data.secure_url,
+                            catePro: +document.querySelector("#catePro").value,
+                            view: 0,
+                            createAt: "abc",
+                        });
+                    }).then(() => {
+                        alert("Thêm mới sản phẩm thành công");
+                    });
+                });
+            });
+        });
     },
 };
 export default productAdd;

@@ -1,3 +1,6 @@
+import HomePage from "../pages/home";
+import { reRender } from "../utils/index";
+
 const Header = {
     render() {
         return /* html */`
@@ -27,21 +30,30 @@ const Header = {
         <!-- Amado Nav -->
         <nav class="amado-nav">
             <ul>
-                <li class="js_active active"><a href="/home">Home</a></li>
-                <li class="js_active"><a href="/products">Shop</a></li>
-                <li class="js_active"><a href="">Blogs</a></li>
+                <li class="js_active active"><a href="/#/home">Home</a></li>
+                <li class="js_active"><a href="/#/products">Shop</a></li>
+                <li class="js_active"><a href="/#/blogs">Blogs</a></li>
                 <li class="js_active"><a href="">FEED</a></li>
             </ul>
         </nav>
         <!-- Button Group -->
-        
+        <div class="amado-btn-group mt-30 mb-100">
+            <a href="#" class="btn amado-btn mb-15 btn-warning">%Discount%</a>
+            <a href="#" class="btn amado-btn active">New this week</a>
+        </div>
         <!-- Cart Menu -->
         <div class="cart-fav-search mb-100">
-            <a href="cart.html" class="cart-nav"><img
+            ${localStorage.getItem("user") ? `
+            <a href="/#/" class="cart-nav" id="userName"></a>
+            <button class="fav-nav btn" id="logout"><img
+            src="img/core-img/favorites.png" alt="" > LOGOUT</button>
+        ` : `
+            <a href="/#/login" class="fav-nav"><img
+            src="img/core-img/favorites.png" alt=""> LOGIN</a>`}
+            <a href="/#/cart" class="cart-nav"><img
                     src="img/core-img/cart.png" alt=""> Cart
                 <span>(0)</span></a>
-            <a href="#" class="fav-nav"><img
-                    src="img/core-img/favorites.png" alt=""> Favourite</a>
+            
             <a href="#" class="search-nav"><img
                     src="img/core-img/search.png" alt=""> Search</a>
         </div>
@@ -59,8 +71,13 @@ const Header = {
         `;
     },
     afterRender() {
-        const btnNavs = document.querySelectorAll(".js_active");
-        console.log(btnNavs);
+        const userName = document.querySelector("#userName");
+        const btnLogout = document.querySelector("#logout");
+        userName.innerHTML = JSON.parse(localStorage.getItem("user")).username;
+        btnLogout.addEventListener("click", () => {
+            localStorage.removeItem("user");
+            reRender(HomePage, "#app");
+        });
     },
 };
 export default Header;

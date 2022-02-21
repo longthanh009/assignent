@@ -172,8 +172,8 @@ const cateEdit = {
                                             class="btn btn-primary mr-2"
                                             id="btnEdit"
                                             >Submit</button>
-                                        <button
-                                            class="btn btn-light">Cancel</button>
+                                        <a href="/admin/categories"
+                                            class="btn btn-light">Cancel</a>
                                     </form>
                                 </div>
                             </div>

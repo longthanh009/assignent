@@ -11042,7 +11042,6 @@ textarea.is-invalid.tt-hint {
   padding: 0.875rem 1.5rem;
   font-size: 0.875rem;
   line-height: 1;
-  border-radius: 0.1875rem;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
@@ -24629,9 +24628,6 @@ dl li {
 }
 
 .table td img, .jsgrid .jsgrid-table td img {
-  width: 36px;
-  height: 36px;
-  border-radius: 100%;
 }
 
 .table td .badge, .jsgrid .jsgrid-table td .badge {

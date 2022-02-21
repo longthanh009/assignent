@@ -1,8 +1,12 @@
 import Header from "../componemt/header";
 import Footer from "../componemt/footer";
+import { getLimit } from "../api/post";
+import { viewProduct } from "../api/products";
 
 const HomePage = {
-    render() {
+    async render() {
+        const blogs = await (await getLimit(2)).data;
+        const proView = await (await viewProduct(6)).data;
         return /* html */`
     <div class="search-wrapper section-padding-100">
             <div class="search-close">
@@ -28,7 +32,7 @@ const HomePage = {
 
 <!-- ##### Main Content Wrapper Start ##### -->
 <div class="main-content-wrapper d-flex clearfix">
-    ${Header.render()}
+        ${Header.render()}
     <div class="products-catagories-area clearfix">
         <!-- slider section -->
         <section class="slider_section my-2">
@@ -38,7 +42,7 @@ const HomePage = {
                     <div class="carousel-item active">
                         <div class="container ">
                             <div class="row">
-                                <div class="col-md-7 col-lg-6 d-flex">
+                                <div class="col-md-12 col-lg-12 d-flex">
                                     <div class="detail-box">
                                         <h1>
                                             Fast Food Restaurant
@@ -59,7 +63,7 @@ const HomePage = {
                                             </a>
                                         </div>
                                     </div>
-                                    <img src="./img/product-img/pro-big-1.jpg" alt="">
+                                    <img src="img/bg-img/6.jpg" alt="">
 
                                 </div>
                             </div>
@@ -68,7 +72,7 @@ const HomePage = {
                     <div class="carousel-item">
                         <div class="container ">
                             <div class="row">
-                                <div class="col-md-7 col-lg-6 d-flex">
+                                <div class="col-md-12 col-lg-12 d-flex">
                                     <div class="detail-box">
                                         <h1>
                                             Fast Food Restaurant
@@ -89,7 +93,7 @@ const HomePage = {
                                             </a>
                                         </div>
                                     </div>
-                                    <img src="./img/product-img/pro-big-1.jpg" alt="">
+                                    <img src="img/bg-img/6.jpg" alt="">
 
                                 </div>
                             </div>
@@ -98,7 +102,7 @@ const HomePage = {
                     <div class="carousel-item">
                         <div class="container ">
                             <div class="row">
-                                <div class="col-md-7 col-lg-6 d-flex">
+                                <div class="col-md-12 col-lg-12 d-flex">
                                     <div class="detail-box">
                                         <h1>
                                             Fast Food Restaurant
@@ -119,7 +123,7 @@ const HomePage = {
                                             </a>
                                         </div>
                                     </div>
-                                    <img src="./img/product-img/pro-big-1.jpg" alt="">
+                                    <img src="img/bg-img/6.jpg" alt="">
 
                                 </div>
                             </div>
@@ -141,24 +145,12 @@ const HomePage = {
         </section>
         <!-- end slider section -->
         <div class="amado-pro-catagory clearfix">
-
+            <h2 class="my-5 text-center">News</h2>
+            <div class ="row">
             <!-- Single Catagory -->
-            <div class="single-products-catagory clearfix">
+            <div class="col-md-4 mb-3 single-products-catagory clearfix">
                 <a href="shop.html">
-                    <img src="img/bg-img/1.jpg" alt="">
-                    <!-- Hover Content -->
-                    <div class="hover-content">
-                        <div class="line"></div>
-                        <p>From $180</p>
-                        <h4>Modern Chair</h4>
-                    </div>
-                </a>
-            </div>
-
-            <!-- Single Catagory -->
-            <div class="single-products-catagory clearfix">
-                <a href="shop.html">
-                    <img src="img/bg-img/2.jpg" alt="">
+                    <img src="img/bg-img/3.jpg" alt="">
                     <!-- Hover Content -->
                     <div class="hover-content">
                         <div class="line"></div>
@@ -169,7 +161,7 @@ const HomePage = {
             </div>
 
             <!-- Single Catagory -->
-            <div class="single-products-catagory clearfix">
+            <div class="col-md-4 mb-3 single-products-catagory clearfix">
                 <a href="shop.html">
                     <img src="img/bg-img/3.jpg" alt="">
                     <!-- Hover Content -->
@@ -182,9 +174,9 @@ const HomePage = {
             </div>
 
             <!-- Single Catagory -->
-            <div class="single-products-catagory clearfix">
+            <div class="col-md-4 mb-3 single-products-catagory clearfix">
                 <a href="shop.html">
-                    <img src="img/bg-img/4.jpg" alt="">
+                    <img src="img/bg-img/3.jpg" alt="">
                     <!-- Hover Content -->
                     <div class="hover-content">
                         <div class="line"></div>
@@ -195,9 +187,9 @@ const HomePage = {
             </div>
 
             <!-- Single Catagory -->
-            <div class="single-products-catagory clearfix">
+            <div class="col-md-4 mb-3 single-products-catagory clearfix">
                 <a href="shop.html">
-                    <img src="img/bg-img/5.jpg" alt="">
+                    <img src="img/bg-img/3.jpg" alt="">
                     <!-- Hover Content -->
                     <div class="hover-content">
                         <div class="line"></div>
@@ -208,9 +200,9 @@ const HomePage = {
             </div>
 
             <!-- Single Catagory -->
-            <div class="single-products-catagory clearfix">
+            <div class="col-md-4 mb-3 single-products-catagory clearfix">
                 <a href="shop.html">
-                    <img src="img/bg-img/6.jpg" alt="">
+                    <img src="img/bg-img/3.jpg" alt="">
                     <!-- Hover Content -->
                     <div class="hover-content">
                         <div class="line"></div>
@@ -221,44 +213,48 @@ const HomePage = {
             </div>
 
             <!-- Single Catagory -->
-            <div class="single-products-catagory clearfix">
-                <a href="shop.html">
-                    <img src="img/bg-img/7.jpg" alt="">
-                    <!-- Hover Content -->
-                    <div class="hover-content">
-                        <div class="line"></div>
-                        <p>From $318</p>
-                        <h4>Metallic Chair</h4>
-                    </div>
-                </a>
-            </div>
-
-            <!-- Single Catagory -->
-            <div class="single-products-catagory clearfix">
-                <a href="shop.html">
-                    <img src="img/bg-img/8.jpg" alt="">
-                    <!-- Hover Content -->
-                    <div class="hover-content">
-                        <div class="line"></div>
-                        <p>From $318</p>
-                        <h4>Modern Rocking Chair</h4>
-                    </div>
-                </a>
-            </div>
-
-            <!-- Single Catagory -->
-            <div class="single-products-catagory clearfix">
-                <a href="shop.html">
-                    <img src="img/bg-img/9.jpg" alt="">
-                    <!-- Hover Content -->
-                    <div class="hover-content">
-                        <div class="line"></div>
-                        <p>From $318</p>
-                        <h4>Home Deco</h4>
-                    </div>
-                </a>
             </div>
         </div>
+        <div class="amado-pro-catagory clearfix">
+            <h2 class="my-5 text-center">Hots</h2>
+                <div class="row">
+                    <!-- Single Catagory -->
+                    ${proView.map((pro) => `
+                    <div class="col-md-4 mb-3 single-products-catagory clearfix">
+                        <a href="/#/products/${pro.id}">
+                            <img src="${pro.img}" alt="">
+                            <!-- Hover Content -->
+                            <div class="hover-content">
+                                <div class="line"></div>
+                                <p>From ${pro.price}</p>
+                                <h4>${pro.product_name}</h4>
+                            </div>
+                        </a>
+                    </div>
+                `).join("")}
+            </div>
+        </div>
+        <div class="amado-pro-catagory clearfix">
+            <h2 class="my-5 text-center">Blogs</h2>
+            <div class="row">
+                <!-- Single Catagory -->
+                ${blogs.map((blog) => /* html */`
+                    <div class="col-md-6 mb-3 single-products-catagory clearfix">
+                        <a href="shop.html">
+                            <img src="${blog.img}" alt="">
+                            <!-- Hover Content -->
+                            <div class="hover-content">
+                            <div class="line"></div>
+                            <p>${blog.creatPost}</p>
+                            <h4>${blog.content}</h4>
+                            </div>
+                        </a>
+                    </div>
+                `).join("")}
+                
+                <!-- Single Catagory -->
+            </div>
+</div>
     </div>
     <!-- Product Catagories Area End -->
 </div>
@@ -288,6 +284,7 @@ const HomePage = {
                     </form>
                 </div>
             </div>
+            
         </div>
     </div>
 </section>
@@ -297,6 +294,9 @@ const HomePage = {
         ${Footer.render()}
 <!-- ##### Footer Area End ##### -->
         `;
+    },
+    afterRender() {
+        Header.afterRender();
     },
 };
 export default HomePage;

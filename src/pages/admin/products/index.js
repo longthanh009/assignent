@@ -1,8 +1,11 @@
+import { getAllPro, removePro } from "../../../api/products";
 import AdminFooter from "../../../componemt/AdminFooter";
 import AdminHeader from "../../../componemt/AdminHeader";
+import { reRender } from "../../../utils";
 
 const productAdmin = {
-    render() {
+    async render() {
+        const { data } = await getAllPro();
         return /* html */`
         <div class="container-scroller">
         <!-- partial:./partials/_navbar.html -->
@@ -150,7 +153,7 @@ const productAdmin = {
                             </p>
                             </div>
                             <div>
-                            <a href="" class="btn btn-primary">Thêm</a>
+                            <a href="/admin/products/add" class="btn btn-primary">Thêm</a>
                             </div>
                         </div>
                         
@@ -166,65 +169,19 @@ const productAdmin = {
                                 </tr>
                             </thead>
                             <tbody>
+                            ${data.map((val, index) => `
                                 <tr>
-                                <td>1</td>
-                                <td>Jacob</td>
-                                <td>Photoshop</td>
-                                <td class="text-danger"> 28.76% <i
-                                    class="ti-arrow-down"></i></td>
-                                <td>
-                                    <a href="" class="btn btn-sm btn-primary">Sửa</a>
-                                    <a href="" class="btn btn-sm btn-danger">Xoá</a>
-                                </td>
+                                    <td>${index + 1}</td>
+                                    <td>${val.product_name}</td>
+                                    <td>${val.price}</td>
+                                    <td class="text-danger"> ${val.sale} <i
+                                        class="ti-arrow-down"></i></td>
+                                    <td>
+                                        <a href="/admin/products/${val.id}/edit" class="btn btn-sm btn-primary">Edit</a>
+                                        <button data-id=${val.id} class="btn btn-sm btn-danger btn-remove">Deletel</button>
+                                    </td>
                                 </tr>
-                                <tr>
-                                <td>1</td>
-
-                                <td>Messsy</td>
-                                <td>Flash</td>
-                                <td class="text-danger"> 21.06% <i
-                                    class="ti-arrow-down"></i></td>
-                                <td>
-                                    <a href="" class="btn btn-sm btn-primary">Sửa</a>
-                                    <a href="" class="btn btn-sm btn-danger">Xoá</a>
-                                </td>
-                                </tr>
-                                <tr>
-                                <td>1</td>
-
-                                <td>John</td>
-                                <td>Premier</td>
-                                <td class="text-danger"> 35.00% <i
-                                    class="ti-arrow-down"></i></td>
-                                <td>
-                                    <a href="" class="btn btn-sm btn-primary">Sửa</a>
-                                    <a href="" class="btn btn-sm btn-danger">Xoá</a>
-                                </td>
-                                </tr>
-                                <tr>
-                                <td>1</td>
-
-                                <td>Peter</td>
-                                <td>After effects</td>
-                                <td class="text-success"> 82.00% <i
-                                    class="ti-arrow-up"></i></td>
-                                <td>
-                                    <a href="" class="btn btn-sm btn-primary">Sửa</a>
-                                    <a href="" class="btn btn-sm btn-danger">Xoá</a>
-                                </td>
-                                </tr>
-                                <tr>
-                                <td>1</td>
-
-                                <td>Dave</td>
-                                <td>53275535</td>
-                                <td class="text-success"> 98.05% <i
-                                    class="ti-arrow-up"></i></td>
-                                <td>
-                                    <a href="" class="btn btn-sm btn-primary">Sửa</a>
-                                    <a href="" class="btn btn-sm btn-danger">Xoá</a>
-                                </td>
-                                </tr>
+    `).join("")}
                             </tbody>
                             </table>
                         </div>
@@ -237,6 +194,22 @@ const productAdmin = {
             </div>
         </div>
     </div>`;
+    },
+    afterRender() {
+        const btnRemove = document.querySelectorAll(".btn-remove");
+        btnRemove.forEach((btn) => {
+            const { id } = btn.dataset;
+            btn.addEventListener("click", () => {
+                const result = confirm("Bạn có muốn xoá không ?");
+                if (result) {
+                    removePro(id).then(() => {
+                        reRender(productAdmin, "#app");
+                    }).then(() => {
+                        alert("Bạn đã xoá thành công");
+                    });
+                }
+            });
+        });
     },
 };
 export default productAdmin;

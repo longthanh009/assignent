@@ -1,10 +1,11 @@
-import { add } from "../../../api/categories";
+import { getAllPost, removePost } from "../../../api/post";
 import AdminFooter from "../../../componemt/AdminFooter";
 import AdminHeader from "../../../componemt/AdminHeader";
 import { reRender } from "../../../utils";
 
-const categoriAdd = {
+const postAdmin = {
     async render() {
+        const { data } = await getAllPost();
         return /* html */`
         <div class="container-scroller">
         <!-- partial:./partials/_navbar.html -->
@@ -140,65 +141,76 @@ const categoriAdd = {
             <!-- partial -->
             <div class="main-panel">
                 <div class="content-wrapper">
-                    <div class="row">
-                        <div class="col-md-6 grid-margin stretch-card">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h4 class="card-title">Danh mục</h4>
-                                    <p class="card-description">
-                                        Thêm danh mục sản phẩm
-                                    </p>
-                                    <form class="forms-sample" id="formAdd" method = "POST">
-                                        <div class="form-group">
-                                            <label
-                                                for="exampleInputId">ID</label>
-                                            <input type="email"
-                                                class="form-control"
-                                                id="exampleInputId"
-                                                placeholder="ID AUTO" disabled>
-                                        </div>
-                                        
-                                        <div class="form-group">
-                                            <label
-                                                for="exampleInputName">Name</label>
-                                            <input type="text"
-                                                class="form-control"
-                                                id="exampleInputName"
-                                                placeholder="Categorie Name">
-                                                <label id="err_Name"
-                                                for="exampleInputName"></label>
-                                        </div>
-                                        <button id="btnFormAdd"
-                                            class="btn btn-primary mr-2">Submit</button>
-                                        <a href="/admin/categories"
-                                            class="btn btn-light">Cancel</a>
-                                    </form>
-                                </div>
+                <div class="row">
+                    <div class="col-lg-12 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                            <h4 class="card-title">Blogs</h4>
+                            <p class="card-description">
+                                All view
+                            </p>
+                            </div>
+                            <div>
+                            <a href="/admin/posts/add" class="btn btn-primary">Thêm</a>
                             </div>
                         </div>
+                        
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                <th>STT</th>
+                                <th>Title</th>
+                                <th>Image</th>
+                                <th>Createt_At</th>
+                                <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            ${data.map((val, index) => `
+                                <tr>
+                                    <td>${index + 1}</td>
+                                    <td>${val.title}</td>
+                                    <td>
+                                    <img src="${val.img}" alt="" width="60px" height="80px">
+                                    </td>
+                                    <td>${val.creatPost}</td>
+                                    <td>
+                                        <a href="/admin/posts/${val.id}/edit" class="btn btn-sm btn-primary">Edit</a>
+                                        <button data-id=${val.id} class="btn btn-sm btn-danger btn-remove">Deletel</button>
+                                    </td>
+                                </tr>
+    `).join("")}
+                            </tbody>
+                            </table>
+                        </div>
+                        </div>
                     </div>
+                    </div>
+                </div>
                 </div>
                 ${AdminFooter.render()}
             </div>
         </div>
-    </div>
-        `;
+    </div>`;
     },
     afterRender() {
-        const formAdd = document.querySelector("#btnFormAdd");
-        formAdd.addEventListener("click", (e) => {
-            const name = document.querySelector("#exampleInputName").value;
-
-            if (name == "") {
-                document.querySelector("#err_Name").innerHTML = "Không được để trống";
-            } else {
-                document.querySelector("#err_Name").innerHTML = "";
-                add({
-                    name,
-                });
-                alert("Thêm thành công");
-            }
+        const btnRemove = document.querySelectorAll(".btn-remove");
+        btnRemove.forEach((btn) => {
+            const { id } = btn.dataset;
+            btn.addEventListener("click", () => {
+                const result = confirm("Bạn có muốn xoá không ?");
+                if (result) {
+                    removePost(id).then(() => {
+                        reRender(postAdmin, "#app");
+                    }).then(() => {
+                        alert("Bạn đã xoá thành công");
+                    });
+                }
+            });
         });
     },
 };
-export default categoriAdd;
+export default postAdmin;

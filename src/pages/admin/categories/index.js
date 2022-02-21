@@ -1,6 +1,7 @@
 import { getAll, remove } from "../../../api/categories";
 import AdminFooter from "../../../componemt/AdminFooter";
 import AdminHeader from "../../../componemt/AdminHeader";
+import { reRender } from "../../../utils";
 
 const categoriesIndex = {
     async render() {
@@ -200,6 +201,8 @@ const categoriesIndex = {
                 const confirm = window.confirm("Bạn có muốn xoá không ?");
                 if (confirm) {
                     remove(id).then(() => {
+                        reRender(categoriesIndex, "#app");
+                    }).then(() => {
                         alert("Đã xoá thành công !");
                     });
                 }

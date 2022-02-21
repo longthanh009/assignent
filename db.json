@@ -1,42 +1,117 @@
 {
   "categories": [
     {
-      "id": "1",
-      "name": "Okeoke"
+      "name": " T-shirt",
+      "id": 1
     },
     {
-      "id": "2",
-      "name": "table"
+      "name": "Jeans",
+      "id": 2
     },
     {
-      "name": "Pen",
-      "id": "8UY6GU9"
+      "name": "Jacket",
+      "id": 3
     },
     {
-      "id": 4,
-      "name": "Quần Áo"
+      "name": " Blazer",
+      "id": 4
+    },
+    {
+      "name": "Sweatshirts",
+      "id": 5
+    },
+    {
+      "name": "Shirt",
+      "id": 6
+    },
+    {
+      "name": "Trousers",
+      "id": 7
     }
   ],
   "products": [
     {
-      "id": "1",
-      "product_name": "abc",
-      "price": "5",
-      "sale": "3",
-      "desc": "cderv",
-      "img": "cderv",
-      "id_cate": "1",
-      "created_time": "30/2"
-    }
-  ],
-  "banner": [
+      "id": 2,
+      "product_name": "CD",
+      "price": 10,
+      "sale": 0,
+      "desc": "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available",
+      "img": "https://res.cloudinary.com/df4kjrav4/image/upload/v1645111648/ncgg5rdyjqh6pfmxcfo2.jpg",
+      "catePro": 1,
+      "view": 70
+    },
     {
-      "id": "1",
-      "title": "abcdef",
-      "desc": "dcdreg",
-      "image": "abc.jpg",
-      "url": "abcsd"
+      "id": 3,
+      "product_name": "EKGJDE",
+      "price": 20,
+      "sale": 0,
+      "desc": "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available",
+      "img": "https://res.cloudinary.com/df4kjrav4/image/upload/v1645111687/akql2t6bng7p7v5dsmxc.jpg",
+      "catePro": 3,
+      "view": 65
+    },
+    {
+      "id": 4,
+      "product_name": "ERRRRT",
+      "price": 50,
+      "sale": 0,
+      "desc": "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available",
+      "img": "https://res.cloudinary.com/df4kjrav4/image/upload/v1645111712/duved93fndqxjkbjaunz.jpg",
+      "catePro": 4,
+      "view": 60
+    },
+    {
+      "id": 5,
+      "product_name": "CD",
+      "price": 220,
+      "sale": 0,
+      "desc": "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available",
+      "img": "https://res.cloudinary.com/df4kjrav4/image/upload/v1645111746/tpvjcqozcq5fd8cyoygr.jpg",
+      "catePro": 2,
+      "view": 55
+    },
+    {
+      "product_name": "VBNHNN",
+      "price": 29,
+      "sale": 0,
+      "desc": "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available",
+      "img": "https://res.cloudinary.com/df4kjrav4/image/upload/v1645111785/he3ffbhhpggpcmun3yjf.jpg",
+      "catePro": 1,
+      "view": 50,
+      "createAt": "abc",
+      "id": 6
     }
   ],
-  "users" :[]
+  "posts": [
+    {
+      "title": "Bài viết 1",
+      "content": "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Facere quibusdam nam temporibus repellat incidunt mollitia odit suscipit, totam iusto ducimus ipsa eveniet deserunt alias nobis ea, veritatis labore eligendi itaque.",
+      "img": "https://res.cloudinary.com/df4kjrav4/image/upload/v1645108884/hvgirv8lzd8tb8lhqiu4.jpg",
+      "createAt": "\"2022-02-17T14:41:02.523Z\"",
+      "id": 2
+    },
+    {
+      "title": "Bài viết số 4",
+      "content": "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available",
+      "img": "https://res.cloudinary.com/df4kjrav4/image/upload/v1645110803/pghomgjul9u1bpjch2ai.jpg",
+      "createAt": "2022-02-17T15:13:04.525Z",
+      "id": 4
+    },
+    {
+      "title": "Bài viết số 5",
+      "content": "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available",
+      "img": "https://res.cloudinary.com/df4kjrav4/image/upload/v1645111028/ul6boq6oclos7djvltzn.jpg",
+      "createAt": "Thu Feb 17 2022 22:16:29 GMT+0700 (Indochina Time)",
+      "id": 5
+    }
+  ],
+  "users": [
+    {
+      "email": "longktph14503@fpt.edu.vn",
+      "username": "admin",
+      "password": "1234",
+      "role": 1,
+      "id": 1
+    }
+  ]
 }

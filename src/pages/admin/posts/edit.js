@@ -1,10 +1,12 @@
-import { add } from "../../../api/categories";
+import axios from "axios";
+import { getPost, updatePost } from "../../../api/post";
 import AdminFooter from "../../../componemt/AdminFooter";
 import AdminHeader from "../../../componemt/AdminHeader";
-import { reRender } from "../../../utils";
+import { myForm } from "../../../utils/validate";
 
-const categoriAdd = {
-    async render() {
+const postUpdate = {
+    async render(id) {
+        const { data } = await getPost(id);
         return /* html */`
         <div class="container-scroller">
         <!-- partial:./partials/_navbar.html -->
@@ -137,46 +139,54 @@ const categoriAdd = {
         <!-- partial -->
         <div class="container-fluid page-body-wrapper">
                 ${AdminHeader.render()}
-            <!-- partial -->
-            <div class="main-panel">
+                <!-- partial -->
+                <div class="main-panel">
                 <div class="content-wrapper">
-                    <div class="row">
-                        <div class="col-md-6 grid-margin stretch-card">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h4 class="card-title">Danh mục</h4>
-                                    <p class="card-description">
-                                        Thêm danh mục sản phẩm
-                                    </p>
-                                    <form class="forms-sample" id="formAdd" method = "POST">
-                                        <div class="form-group">
-                                            <label
-                                                for="exampleInputId">ID</label>
-                                            <input type="email"
-                                                class="form-control"
-                                                id="exampleInputId"
-                                                placeholder="ID AUTO" disabled>
-                                        </div>
-                                        
-                                        <div class="form-group">
-                                            <label
-                                                for="exampleInputName">Name</label>
-                                            <input type="text"
-                                                class="form-control"
-                                                id="exampleInputName"
-                                                placeholder="Categorie Name">
-                                                <label id="err_Name"
-                                                for="exampleInputName"></label>
-                                        </div>
-                                        <button id="btnFormAdd"
-                                            class="btn btn-primary mr-2">Submit</button>
-                                        <a href="/admin/categories"
-                                            class="btn btn-light">Cancel</a>
-                                    </form>
-                                </div>
+                <div class="row">
+                    <div class="col-md-6 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                        <h4 class="card-title">Update Post</h4>
+                        <p class="card-description">
+                            Update a post in blogs
+                        </p>
+                        <form class="forms-sample" id="form-post">
+                            <div class="form-group">
+                                <label for="exampleInputID">ID</label>
+                                <input type="text" class="form-control"
+                                    id="exampleInputID" placeholder="ID AUTO" value="${data.id}" disabled>
+                                <label class="err"></label>
+
                             </div>
+                            <div class="form-group">
+                                <label for="post-title">Title</label>
+                                <input type="text" class="form-control"
+                                    id="post-title" placeholder="Tiêu để bài viết" value="${data.title}">
+                                <label class="err" id="err_Title"></label>
+
+                            </div>
+                            <div class="form-group">
+                                <label for="post-file" class="form-label">Image</label>
+                                <input class="form-control" type="file" id="postFile">
+                                <label class="err" id="err_file"></label> 
+                            </div>
+                            <div class="form-group">
+                                <label for="post-content">Content</label>
+                                <textarea class="form-control" name="" id="post-content" cols="30" rows="40">
+                                ${data.content}</textarea>
+                                <label class="err" id="err_content"></label> 
+
+                            </div>
+                            <div>
+                                <button
+                                class="btn btn-primary mr-2">Submit</button>
+                                <a class="btn btn-light">Cancel</a>
+                            </div>
+                        </form>
                         </div>
                     </div>
+                    </div>
+                </div>
                 </div>
                 ${AdminFooter.render()}
             </div>
@@ -184,21 +194,48 @@ const categoriAdd = {
     </div>
         `;
     },
-    afterRender() {
-        const formAdd = document.querySelector("#btnFormAdd");
-        formAdd.addEventListener("click", (e) => {
-            const name = document.querySelector("#exampleInputName").value;
-
-            if (name == "") {
-                document.querySelector("#err_Name").innerHTML = "Không được để trống";
-            } else {
-                document.querySelector("#err_Name").innerHTML = "";
-                add({
-                    name,
+    afterRender(id) {
+        const btnSub = document.querySelector("#form-post");
+        const postFile = document.querySelector("#postFile");
+        postFile.addEventListener("change", (e) => {
+            const file = e.target.files[0];
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("upload_preset", "ha9jmrbt");
+            axios({
+                url: "https://api.cloudinary.com/v1_1/df4kjrav4/image/upload",
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-formendcoded",
+                },
+                data: formData,
+            }).then((res) => {
+                btnSub.addEventListener("submit", (e) => {
+                    e.preventDefault();
+                    Promise.all([
+                        myForm({
+                            idElement: "#post-title",
+                            errId: "#err_Title",
+                            content: "Không được để trống tiêu đề",
+                        }),
+                        myForm({
+                            idElement: "#post-content",
+                            errId: "#err_content",
+                            content: "Nội dung của bài viết chưa có !",
+                        }),
+                    ]).then(() => {
+                        updatePost({
+                            title: document.querySelector("#post-title").value,
+                            content: document.querySelector("#post-content").value,
+                            img: res.data.secure_url,
+                            id,
+                        });
+                    }).then(() => {
+                        alert("Cập nhật bài viết thành công");
+                    });
                 });
-                alert("Thêm thành công");
-            }
+            });
         });
     },
 };
-export default categoriAdd;
+export default postUpdate;
