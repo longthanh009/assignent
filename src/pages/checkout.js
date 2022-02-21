@@ -2,6 +2,14 @@ import Header from "../componemt/header";
 
 const Checkout = {
     render() {
+        let cart = [];
+        let total = 0;
+        if (localStorage.getItem("cart")) {
+            cart = JSON.parse(localStorage.getItem("cart"));
+            cart.forEach((item) => {
+                total += item.price * item.quantity;
+            });
+        }
         return /* html */`
             <div class="search-wrapper section-padding-100">
                 <div class="search-close">
@@ -50,18 +58,6 @@ const Checkout = {
                                             <input type="email" class="form-control" id="email" placeholder="Email" value="">
                                         </div>
                                         <div class="col-12 mb-3">
-                                            <select class="w-100" id="country">
-                                            <option value="usa">United States</option>
-                                            <option value="uk">United Kingdom</option>
-                                            <option value="ger">Germany</option>
-                                            <option value="fra">France</option>
-                                            <option value="ind">India</option>
-                                            <option value="aus">Australia</option>
-                                            <option value="bra">Brazil</option>
-                                            <option value="cana">Canada</option>
-                                        </select>
-                                        </div>
-                                        <div class="col-12 mb-3">
                                             <input type="text" class="form-control mb-3" id="street_address" placeholder="Address" value="">
                                         </div>
                                         <div class="col-12 mb-3">
@@ -95,9 +91,9 @@ const Checkout = {
                             <div class="cart-summary">
                                 <h5>Cart Total</h5>
                                 <ul class="summary-table">
-                                    <li><span>subtotal:</span> <span>$140.00</span></li>
+                                    <li><span>subtotal:</span> <span>$${total}</span></li>
                                     <li><span>delivery:</span> <span>Free</span></li>
-                                    <li><span>total:</span> <span>$140.00</span></li>
+                                    <li><span>total:</span> <span>${total}</span></li>
                                 </ul>
     
                                 <div class="payment-method">
@@ -114,7 +110,7 @@ const Checkout = {
                                 </div>
     
                                 <div class="cart-btn mt-100">
-                                    <a href="#" class="btn amado-btn w-100">Checkout</a>
+                                    <a href="#" class="btn amado-btn w-100 btn-warning">Checkout</a>
                                 </div>
                             </div>
                         </div>
