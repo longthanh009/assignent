@@ -1,3 +1,5 @@
+import $ from "jquery";
+import { validate } from "jquery-validation";
 import { get, update } from "../../../api/categories";
 import AdminFooter from "../../../componemt/AdminFooter";
 import AdminHeader from "../../../componemt/AdminHeader";
@@ -148,7 +150,7 @@ const cateEdit = {
                                     <p class="card-description">
                                         Update categories
                                     </p>
-                                    <form class="forms-sample">
+                                    <form class="forms-sample" id="btnEdit">
                                         <div class="form-group">
                                             <label
                                                 for="ID">ID</label>
@@ -164,13 +166,11 @@ const cateEdit = {
                                                 class="form-control"
                                                 id="cate_Name"
                                                 placeholder="Categories Name"
-                                                value = "${data.name}">
-                                                <label class="err" id="err_Name"></label>
+                                                value = "${data.name}" name="cate_Name">
                                         </div>
                                         
                                         <button
                                             class="btn btn-primary mr-2"
-                                            id="btnEdit"
                                             >Submit</button>
                                         <a href="/admin/categories"
                                             class="btn btn-light">Cancel</a>
@@ -187,21 +187,22 @@ const cateEdit = {
         `;
     },
     afterRender(id) {
-        const btnForm = document.querySelector("#btnEdit");
-        btnForm.addEventListener("click", () => {
-            const name = document.querySelector("#cate_Name").value;
-            if (name == "") {
-                document.querySelector("#err_Name").innerHTML = "Không được để trống !";
-            } else {
-                document.querySelector("#err_Name").innerHTML = "";
+        $("#btnEdit").validate({
+            rules: {
+                cate_Name: "required",
+            },
+            messages: {
+                cate_Name: "Không được bỏ trống !",
+            },
+            submitHandler: () => {
                 update({
-                    id, name,
+                    id, name: document.querySelector("#cate_Name").value,
                 }).then(() => {
                     alert("Update thành công!");
                 }).catch((Error) => {
                     console.log(Error);
                 });
-            }
+            },
         });
     },
 };

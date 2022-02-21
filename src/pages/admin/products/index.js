@@ -164,7 +164,7 @@ const productAdmin = {
                                 <th>STT</th>
                                 <th>Product</th>
                                 <th>Price</th>
-                                <th>Sale</th>
+                                <th>Image</th>
                                 <th>Status</th>
                                 </tr>
                             </thead>
@@ -174,8 +174,9 @@ const productAdmin = {
                                     <td>${index + 1}</td>
                                     <td>${val.product_name}</td>
                                     <td>${val.price}</td>
-                                    <td class="text-danger"> ${val.sale} <i
-                                        class="ti-arrow-down"></i></td>
+                                    <td class="text-danger">
+                                        <img src=" ${val.img}"
+                                        alt="profile" width = "60px"/>
                                     <td>
                                         <a href="/admin/products/${val.id}/edit" class="btn btn-sm btn-primary">Edit</a>
                                         <button data-id=${val.id} class="btn btn-sm btn-danger btn-remove">Deletel</button>

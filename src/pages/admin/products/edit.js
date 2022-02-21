@@ -1,13 +1,14 @@
 import axios from "axios";
+import $, { data } from "jquery";
+import validate from "jquery-validation";
 import { getAll } from "../../../api/categories";
 import { getPro, updatePro } from "../../../api/products";
 import AdminFooter from "../../../componemt/AdminFooter";
 import AdminHeader from "../../../componemt/AdminHeader";
-import { myForm } from "../../../utils/validate";
 
 const productEdit = {
     async render(id) {
-        const { data } = await getAll();
+        const categories = await (await getAll()).data;
         const pro = await (await getPro(id)).data;
         return /* html */`
         <div class="container-scroller">
@@ -155,53 +156,45 @@ const productEdit = {
                         <form class="forms-sample" id="form-Product">
                             <div class="form-group">
                                 <label for="exampleInputID">ID</label>
-                                <input type="text" class="form-control"
+                                <input type="text" class="form-control" 
                                     id="exampleInputID" placeholder="ID AUTO" value="${pro.id}" disabled>
-                                <label class="err"></label>
-
                             </div>
                             <div class="form-group">
                                 <label for="productName">Product Name</label>
-                                <input type="text" class="form-control"
-                                    id="productName" placeholder="Tên sản phẩm" value="${pro.product_name}">
-                                <label class="err" id="err_namePro"></label>
-
+                                <input type="text" class="form-control" name ="proName"
+                                    id="proName" placeholder="Tên sản phẩm" value="${pro.product_name}">
                             </div>
                             <div class="form-group">
                                 <label for="productPrice">Price</label>
-                                <input type="text" class="form-control"
-                                    id="productPrice"  placeholder="Giá của sản phẩm" value ="${pro.price}">
-                                <label class="err" id="err_pricePro"></label>
-
+                                <input type="text" class="form-control" name="proPrice"
+                                    id="proPrice"  placeholder="Giá của sản phẩm" value ="${pro.price}">
                             </div>
                             <div class="form-group">
                                 <label for="productSale">Sale</label>
-                                <input type="text" class="form-control"
-                                    id="productSale"  placeholder="Giá sale của sản phẩm" 
+                                <input type="text" class="form-control" name ="proSale"
+                                    id="proSale"  placeholder="Giá sale của sản phẩm" 
                                     value ="${pro.sale}">
-                                <label class="err" id="err_salePro"></label>
-
                             </div>
                             <div class="form-group">
                                 <label for="formFile" class="form-label">Default file input example</label>
                                 <input class="form-control" type="file" id="formFile">
-                                <label class="err" id="err_filePro"></label>
-                                
+                                <div class="text-center my-3">
+                                    <img src="${pro.img}"
+                                    alt="profile" id = "imgPreview" width="170px" style="border: 1px solid rgb(172, 171, 171);"/>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label>Categoried Products</label>
-                                <select class="js-example-basic-single w-100" id="catePro">
+                                <select class="js-example-basic-single w-100" id="proCate" name="proCate">
                                     <option value="${pro.catePro}">Chose</option>
-                                ${data.map((value) => `
+                                ${categories.map((value) => `
                                     <option value="${value.id}">${value.name}</option>
                                 `)}
                                 </select>
-                                <label class="err" id="err_catePro"></label>
-
                             </div>
                             <div class="form-group">
                                 <label for="productDesc">Description</label>
-                                <textarea class="form-control" name="" id="productDesc" cols="30" rows="40" placeholder="Mô tả sản phẩm">${pro.desc}</textarea>
+                                <textarea class="form-control" name="" id="proDesc" cols="30" rows="40" placeholder="Mô tả sản phẩm">${pro.desc}</textarea>
                             </div>
                             <div>
                                 <button
@@ -220,55 +213,58 @@ const productEdit = {
     </div>
         `;
     },
-    afterRender(id) {
-        const btnSub = document.querySelector("#form-Product");
+    async afterRender(id) {
+        const pro = await getPro(id);
         const formFile = document.querySelector("#formFile");
-        formFile.addEventListener("change", (e) => {
-            const file = e.target.files[0];
-            const formData = new FormData();
-            formData.append("file", file);
-            formData.append("upload_preset", "ha9jmrbt");
-            axios({
-                url: "https://api.cloudinary.com/v1_1/df4kjrav4/image/upload",
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-formendcoded",
-                },
-                data: formData,
-            }).then((res) => {
-                btnSub.addEventListener("submit", (e) => {
-                    e.preventDefault();
-                    Promise.all([
-                        myForm({
-                            idElement: "#productName",
-                            errId: "#err_namePro",
-                            content: "Tên sản phẩm không được để trống",
-                        }),
-                        myForm({
-                            idElement: "#productPrice",
-                            errId: "#err_pricePro",
-                            content: "Nhập giá sản phẩm",
-                        }),
-                        myForm({
-                            idElement: "#catePro",
-                            errId: "#err_catePro",
-                            content: "Chọn danh mục sản phẩm",
-                        }),
-                    ]).then(() => {
-                        updatePro({
-                            product_name: document.querySelector("#productName").value,
-                            price: +document.querySelector("#productPrice").value,
-                            sale: +document.querySelector("#productSale").value,
-                            desc: document.querySelector("#productDesc").value,
-                            img: res.data.secure_url,
-                            catePro: +document.querySelector("#catePro").value,
-                            id,
+        const imgPreview = document.querySelector("#imgPreview");
+        const url = "https://api.cloudinary.com/v1_1/df4kjrav4/image/upload";
+        let imgLink = "";
+        formFile.addEventListener("change", async (e) => {
+            imgPreview.src = URL.createObjectURL(e.target.files[0]);
+        });
+        $("#form-Product").validate({
+            rules: {
+                proName: "required",
+                proPrice: "required",
+                proCate: "required",
+            },
+            messages: {
+                proName: "Không được để trống tên sản phẩm",
+                proPrice: "Giá sản phẩm",
+                proCate: "Chọn danh mục sản phẩm",
+
+            },
+            submitHandler: () => {
+                async function updateProduct() {
+                    const file = formFile.files[0];
+                    const formData = new FormData();
+                    if (file) {
+                        formData.append("file", file);
+                        formData.append("upload_preset", "ha9jmrbt");
+                        const data = await axios.post(url, formData, {
+                            headers: {
+                                "Content-Type": "application/form-data",
+                            },
                         });
-                    }).then(() => {
-                        alert("Update sản phẩm thành công");
+                        imgLink = data.url;
+                    }
+                    updatePro({
+                        product_name: document.querySelector("#proName").value,
+                        price: +document.querySelector("#proPrice").value,
+                        sale: +document.querySelector("#proSale").value,
+                        desc: document.querySelector("#proDesc").value,
+                        img: imgLink || imgPreview.src,
+                        catePro: +document.querySelector("#proCate").value,
+                        view: pro.view,
+                        createAt: pro.createAt,
+                        id,
                     });
+                }
+                updateProduct().then((res) => {
+                    console.log(res);
+                    alert("Update sản phẩm thành công !");
                 });
-            });
+            },
         });
     },
 };

@@ -1,7 +1,8 @@
+import $ from "jquery";
+import { validate } from "jquery-validation";
 import { add } from "../../../api/categories";
 import AdminFooter from "../../../componemt/AdminFooter";
 import AdminHeader from "../../../componemt/AdminHeader";
-import { reRender } from "../../../utils";
 
 const categoriAdd = {
     async render() {
@@ -163,10 +164,8 @@ const categoriAdd = {
                                                 for="exampleInputName">Name</label>
                                             <input type="text"
                                                 class="form-control"
-                                                id="exampleInputName"
-                                                placeholder="Categorie Name">
-                                                <label id="err_Name"
-                                                for="exampleInputName"></label>
+                                                id="cateName"
+                                                placeholder="Categorie Name" name="cateName">
                                         </div>
                                         <button id="btnFormAdd"
                                             class="btn btn-primary mr-2">Submit</button>
@@ -185,19 +184,20 @@ const categoriAdd = {
         `;
     },
     afterRender() {
-        const formAdd = document.querySelector("#btnFormAdd");
-        formAdd.addEventListener("click", (e) => {
-            const name = document.querySelector("#exampleInputName").value;
-
-            if (name == "") {
-                document.querySelector("#err_Name").innerHTML = "Không được để trống";
-            } else {
-                document.querySelector("#err_Name").innerHTML = "";
+        $("#formAdd").validate({
+            rules: {
+                cateName: "required",
+            },
+            messages: {
+                cateName: "Vui lòng điền tên danh mục",
+            },
+            submitHandler: () => {
                 add({
-                    name,
+                    name: document.querySelector("#cateName").value,
+                }).then(() => {
+                    alert("Bạn đã thêm thành công");
                 });
-                alert("Thêm thành công");
-            }
+            },
         });
     },
 };

@@ -1,8 +1,9 @@
 import axios from "axios";
+import $ from "jquery";
+import validate from "jquery-validation";
 import { addPost } from "../../../api/post";
 import AdminFooter from "../../../componemt/AdminFooter";
 import AdminHeader from "../../../componemt/AdminHeader";
-import { myForm } from "../../../utils/validate";
 
 const postsAdd = {
     async render() {
@@ -149,24 +150,23 @@ const postsAdd = {
                         <p class="card-description">
                             Create new a blog in blogs
                         </p>
-                        <form class="forms-sample" id="form-Product">
+                        <form class="forms-sample" id="form-Post">
                             <div class="form-group">
                                 <label for="post-title">Title</label>
                                 <input type="text" class="form-control"
-                                    id="post-title" placeholder="Tiêu để bài viết">
-                                <label class="err" id="err_Title"></label>
-
+                                    id="post-title" name= "post-title" placeholder="Tiêu để bài viết">
                             </div>
                             <div class="form-group">
                                 <label for="post-file" class="form-label">Image</label>
                                 <input class="form-control" type="file" id="post-file">
-                                <label class="err" id="err_file"></label> 
+                                <div class="text-center my-3">
+                                    <img src="http://2.bp.blogspot.com/-MowVHfLkoZU/VhgIRyPbIoI/AAAAAAAATtI/fHk-j_MYUBs/s640/placeholder-image.jpg"
+                                    alt="profile" id = "imgPreview" width="170px" style="border: 1px solid rgb(172, 171, 171);"/>
+                                </div> 
                             </div>
                             <div class="form-group">
                                 <label for="post-content">Content</label>
                                 <textarea class="form-control" name="" id="post-content" cols="30" rows="40"></textarea>
-                                <label class="err" id="err_content"></label> 
-
                             </div>
                             <div>
                                 <button
@@ -186,53 +186,45 @@ const postsAdd = {
         `;
     },
     afterRender() {
-        const btnSub = document.querySelector("#form-Product");
+        const imgPreview = document.querySelector("#imgPreview");
         const postFile = document.querySelector("#post-file");
+        const url = "https://api.cloudinary.com/v1_1/df4kjrav4/image/upload";
+        let imgLink = "";
         postFile.addEventListener("change", (e) => {
-            const file = e.target.files[0];
-            const formData = new FormData();
-            formData.append("file", file);
-            formData.append("upload_preset", "ha9jmrbt");
-            axios({
-                url: "https://api.cloudinary.com/v1_1/df4kjrav4/image/upload",
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-formendcoded",
-                },
-                data: formData,
-            }).then((res) => {
-                btnSub.addEventListener("submit", (e) => {
-                    e.preventDefault();
-                    Promise.all([
-                        myForm({
-                            idElement: "#post-title",
-                            errId: "#err_Title",
-                            content: "Không được để trống tiêu đề",
-                        }),
-                        myForm({
-                            idElement: "#post-file",
-                            errId: "#err_file",
-                            content: "Ảnh bài viết",
-                        }),
-                        myForm({
-                            idElement: "#post-content",
-                            errId: "#err_content",
-                            content: "Nội dung của bài viết chưa có !",
-                        }),
-                    ]).then(() => {
-                        const date = new Date();
-                        const time = date.toString();
-                        addPost({
-                            title: document.querySelector("#post-title").value,
-                            content: document.querySelector("#post-content").value,
-                            img: res.data.secure_url,
-                            createAt: time,
+            imgPreview.src = URL.createObjectURL(e.target.files[0]);
+        });
+        $("#form-Post").validate({
+            rules: {
+                "post-title": "required",
+            },
+            messages: {
+                "post-title": "Không được để trống tiêu đề",
+            },
+            submitHandler: () => {
+                async function addBlog() {
+                    const file = postFile.files[0];
+                    const formData = new FormData();
+                    if (file) {
+                        formData.append("file", file);
+                        formData.append("upload_preset", "ha9jmrbt");
+                        const { data } = await axios.post(url, formData, {
+                            headers: {
+                                "Content-Type": "application/form-data",
+                            },
                         });
-                    }).then(() => {
-                        alert("Thêm mới bài viết thành công");
-                    });
+                        imgLink = data.url;
+                    }
+                }
+                addPost({
+                    title: document.querySelector("#post-title").value,
+                    content: document.querySelector("#post-content").value,
+                    img: imgLink || "",
+                    createAt: JSON.stringify(new Date()),
                 });
-            });
+                addBlog().then(() => {
+                    alert("Thêm bài viết thành công");
+                });
+            },
         });
     },
 };

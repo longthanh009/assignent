@@ -21,8 +21,8 @@
       "id": 5
     },
     {
-      "name": "Shirt",
-      "id": 6
+      "id": 6,
+      "name": "Shirt"
     },
     {
       "name": "Trousers",
@@ -71,15 +71,24 @@
       "view": 55
     },
     {
-      "product_name": "VBNHNN",
-      "price": 29,
+      "product_name": "Shirt Polo America",
+      "price": 30,
       "sale": 0,
       "desc": "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available",
-      "img": "https://res.cloudinary.com/df4kjrav4/image/upload/v1645111785/he3ffbhhpggpcmun3yjf.jpg",
-      "catePro": 1,
-      "view": 50,
-      "createAt": "abc",
+      "img": "blob:http://localhost:3000/d896a9d8-917f-49cc-8bd1-8554bcabf68d",
+      "catePro": 6,
       "id": 6
+    },
+    {
+      "product_name": "Shirt Paloa ABC",
+      "price": 33,
+      "sale": 0,
+      "desc": "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available.",
+      "img": "http://res.cloudinary.com/df4kjrav4/image/upload/v1645412417/hkxgrqcyr9uumfl9kp1h.jpg",
+      "catePro": 6,
+      "view": 0,
+      "createAt": "\"2022-02-21T02:59:37.683Z\"",
+      "id": 7
     }
   ],
   "posts": [
@@ -103,6 +112,12 @@
       "img": "https://res.cloudinary.com/df4kjrav4/image/upload/v1645111028/ul6boq6oclos7djvltzn.jpg",
       "createAt": "Thu Feb 17 2022 22:16:29 GMT+0700 (Indochina Time)",
       "id": 5
+    },
+    {
+      "title": "Bài viết 3",
+      "content": "                                In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available.",
+      "img": "http://res.cloudinary.com/df4kjrav4/image/upload/v1645419077/km55kabrnop1o1zt46fp.jpg",
+      "id": 6
     }
   ],
   "users": [

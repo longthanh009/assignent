@@ -25,21 +25,21 @@ const print = async (content, id) => {
     document.getElementById("app").innerHTML = await content.render(id);
     if (content.afterRender) content.afterRender(id);
 };
-router.on("/admin/*", () => {}, {
-    before(done, match) {
-        // do something
-        if (localStorage.getItem("user")) {
-            const userId = JSON.parse(localStorage.getItem("user")).role;
-            if (userId === 1) {
-                done();
-            } else {
-                document.location.href = "/";
-            }
-        } else {
-            document.location.href = "/";
-        }
-    },
-});
+// router.on("/admin/*", () => {}, {
+//     before(done, match) {
+//         // do something
+//         if (localStorage.getItem("user")) {
+//             const userId = JSON.parse(localStorage.getItem("user")).role;
+//             if (userId == 1) {
+//                 done();
+//             } else {
+//                 document.location.href = "/";
+//             }
+//         } else {
+//             document.location.href = "/";
+//         }
+//     },
+// });
 router.on({
     "/": () => print(HomePage),
     "/home": () => print(HomePage),

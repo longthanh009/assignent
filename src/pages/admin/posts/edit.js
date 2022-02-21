@@ -1,8 +1,9 @@
 import axios from "axios";
+import $ from "jquery";
+import validate from "jquery-validation";
 import { getPost, updatePost } from "../../../api/post";
 import AdminFooter from "../../../componemt/AdminFooter";
 import AdminHeader from "../../../componemt/AdminHeader";
-import { myForm } from "../../../utils/validate";
 
 const postUpdate = {
     async render(id) {
@@ -160,22 +161,21 @@ const postUpdate = {
                             </div>
                             <div class="form-group">
                                 <label for="post-title">Title</label>
-                                <input type="text" class="form-control"
+                                <input type="text" class="form-control" name = "post-title"
                                     id="post-title" placeholder="Tiêu để bài viết" value="${data.title}">
-                                <label class="err" id="err_Title"></label>
-
                             </div>
                             <div class="form-group">
                                 <label for="post-file" class="form-label">Image</label>
                                 <input class="form-control" type="file" id="postFile">
-                                <label class="err" id="err_file"></label> 
+                                <div class="text-center my-3">
+                                <img src="http://2.bp.blogspot.com/-MowVHfLkoZU/VhgIRyPbIoI/AAAAAAAATtI/fHk-j_MYUBs/s640/placeholder-image.jpg"
+                                alt="profile" id = "imgPreview" width="170px" style="border: 1px solid rgb(172, 171, 171);"/>
+                            </div> 
                             </div>
                             <div class="form-group">
                                 <label for="post-content">Content</label>
                                 <textarea class="form-control" name="" id="post-content" cols="30" rows="40">
                                 ${data.content}</textarea>
-                                <label class="err" id="err_content"></label> 
-
                             </div>
                             <div>
                                 <button
@@ -195,47 +195,73 @@ const postUpdate = {
         `;
     },
     afterRender(id) {
-        const btnSub = document.querySelector("#form-post");
-        const postFile = document.querySelector("#postFile");
-        postFile.addEventListener("change", (e) => {
-            const file = e.target.files[0];
-            const formData = new FormData();
-            formData.append("file", file);
-            formData.append("upload_preset", "ha9jmrbt");
-            axios({
-                url: "https://api.cloudinary.com/v1_1/df4kjrav4/image/upload",
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-formendcoded",
-                },
-                data: formData,
-            }).then((res) => {
-                btnSub.addEventListener("submit", (e) => {
-                    e.preventDefault();
-                    Promise.all([
-                        myForm({
-                            idElement: "#post-title",
-                            errId: "#err_Title",
-                            content: "Không được để trống tiêu đề",
-                        }),
-                        myForm({
-                            idElement: "#post-content",
-                            errId: "#err_content",
-                            content: "Nội dung của bài viết chưa có !",
-                        }),
-                    ]).then(() => {
-                        updatePost({
-                            title: document.querySelector("#post-title").value,
-                            content: document.querySelector("#post-content").value,
-                            img: res.data.secure_url,
-                            id,
-                        });
-                    }).then(() => {
-                        alert("Cập nhật bài viết thành công");
-                    });
-                });
-            });
+        const imgPreview = document.querySelector("#imgPreview");
+        const url = "https://api.cloudinary.com/v1_1/df4kjrav4/image/upload";
+        const formFile = document.querySelector("#postFile");
+        let imgLink = "";
+        formFile.addEventListener("change", (e) => {
+            imgPreview.src = URL.createObjectURL(e.target.files[0]);
         });
+        $("#form-post").validate({
+            rules: {
+                "post-title": "required",
+            },
+            messages: {
+                "post-title": "Không được để trống tiêu đề",
+            },
+            submitHandler: () => {
+                async function updateBlog() {
+                    const file = formFile.files[0];
+                    const formData = new FormData();
+                    if (file) {
+                        formData.append("file", file);
+                        formData.append("upload_preset", "ha9jmrbt");
+                        const { data } = await axios.post(url, formData, {
+                            headers: {
+                                "Content-Type": "application/form-data",
+                            },
+                        });
+                        imgLink = data.url;
+                    }
+                    updatePost({
+                        title: document.querySelector("#post-title").value,
+                        content: document.querySelector("#post-content").value,
+                        img: imgLink || "",
+                        id,
+                    });
+                }
+                updateBlog().then(() => {
+                    alert("Update bài viết thành công");
+                });
+            },
+        });
+        // const btnSub = document.querySelector("#form-post");
+        // const postFile = document.querySelector("#postFile");
+        // postFile.addEventListener("change", (e) => {
+        //     const file = e.target.files[0];
+        //     const formData = new FormData();
+        //     formData.append("file", file);
+        //     formData.append("upload_preset", "ha9jmrbt");
+        //     axios({
+        //         url: "https://api.cloudinary.com/v1_1/df4kjrav4/image/upload",
+        //         method: "POST",
+        //         headers: {
+        //             "Content-Type": "application/x-www-formendcoded",
+        //         },
+        //         data: formData,
+        //     }).then((res) => {
+        //         btnSub.addEventListener("submit", (e) => {
+        //             updatePost({
+        //                 title: document.querySelector("#post-title").value,
+        //                 content: document.querySelector("#post-content").value,
+        //                 img: res.data.secure_url,
+        //                 id,
+        //             });
+        //         }).then(() => {
+        //             alert("Cập nhật bài viết thành công");
+        //         });
+        //     });
+        // });
     },
 };
 export default postUpdate;

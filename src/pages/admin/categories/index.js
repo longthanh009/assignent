@@ -163,7 +163,6 @@ const categoriesIndex = {
                                 <tr>
                                 <th>STT</th>
                                 <th>Name</th>
-                                <th>Sale</th>
                                 <th>Status</th>
                                 </tr>
                             </thead>
@@ -172,8 +171,6 @@ const categoriesIndex = {
                                 <tr>
                                     <td>${index + 1}</td>
                                     <td>${value.name}</td>
-                                    <td class="text-danger"> 28.76% <i
-                                        class="ti-arrow-down"></i></td>
                                     <td>
                                         <a href="/admin/categories/${value.id}/edit" class="btn btn-sm btn-primary">Edit</a>
                                         <button class="btn btn-sm btn-danger js-btnRemove" data-id="${value.id}">Deletel</button>
